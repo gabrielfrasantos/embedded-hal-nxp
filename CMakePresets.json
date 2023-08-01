@@ -1,0 +1,62 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 24,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "defaults",
+      "hidden": true,
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "generator": "Ninja Multi-Config",
+      "cacheVariables": {
+        "CMAKE_CONFIGURATION_TYPES": "Debug;Release;RelWithDebInfo;MinSizeRel",
+        "HAL_TI_BUILD_EXAMPLES": true
+      }
+    },
+    {
+      "name": "host",
+      "displayName": "host",
+      "description": "Build required tools for host",
+      "inherits": "defaults"
+    },
+    {
+      "name": "tiva",
+      "hidden": true,
+      "inherits": "defaults",
+      "environment": {
+        "CMAKE_TOOLCHAIN_FILE": ""
+      },
+      "cacheVariables": {
+        "EMIL_GENERATE_PACKAGE_CONFIG": false,
+        "TARGET_MCU_VENDOR": "nxp"
+      }
+    },
+    {
+      "name": "tm4c123gh6pm",
+      "displayName": "tm4c123gh6pm",
+      "description": "Build for tm4c123gh6pm",
+      "inherits": "tiva",
+      "toolchainFile": "${sourceDir}/build/${presetName}/_deps/emil-src/cmake/toolchain-arm-gcc-m4-fpv4-sp-d16.cmake",
+      "cacheVariables": {
+        "TARGET_CORTEX": "m4",
+        "TARGET_MCU_FAMILY": "TM4C123",
+        "TARGET_MCU": "tm4c123gh6pm"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "host-RelWithDebInfo",
+      "configuration": "RelWithDebInfo",
+      "configurePreset": "host"
+    },
+    {
+      "name": "tm4c123gh6pm-RelWithDebInfo",
+      "configuration": "RelWithDebInfo",
+      "configurePreset": "tm4c123gh6pm"
+    }
+  ]
+}
